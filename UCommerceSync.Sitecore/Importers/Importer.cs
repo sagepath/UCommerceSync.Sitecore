@@ -864,16 +864,32 @@ namespace UCommerceSync.Sitecore.Importers
             foreach (XElement entityXml in priceGroupPricesXml)
             {
                 var priceGroupIdentifier = this.GetEntityRefIdentifier(entityXml, "PriceGroup");
+	            if (string.IsNullOrWhiteSpace(priceGroupIdentifier))
+	            {
+		            throw new ArgumentException("Price group identifier was null");
+	            }
+
+	            var priceGroupIDentifierToLower = priceGroupIdentifier.ToLower();
+
                 // ISSUE: reference to a compiler-generated method
-                PriceGroupPrice priceGroupPrice1 = product1.PriceGroupPrices.FirstOrDefault(x => x.PriceGroup.Name == priceGroupIdentifier);
+                PriceGroupPrice priceGroupPrice1 = product1.PriceGroupPrices.FirstOrDefault(x => x.PriceGroup.Name.ToLower() == priceGroupIDentifierToLower);
                 if (priceGroupPrice1 == null)
                 {
-                    PriceGroup priceGroup = PriceGroup.FirstOrDefault(x => x.Id == priceGroupPrice1.PriceGroup.Id);
-                    if (priceGroup == null)
+                    PriceGroup priceGroup = PriceGroup.FirstOrDefault(x => x.Name.ToLower() == priceGroupIDentifierToLower );
+
+					if (priceGroup == null)
                     {
-                        // ISSUE: reference to a compiler-generated field
                         throw new ArgumentException(string.Format("Could not find price group: {0} for product: {1}", (object)priceGroupIdentifier, (object)str));
                     }
+
+	                //priceGroupPrice1 = PriceGroupPrice.FirstOrDefault(o => o.PriceGroupPriceId == priceGroup.Id);
+
+                    //if (priceGroupPrice1 == null)
+                    //{
+                    //    // ISSUE: reference to a compiler-generated field
+                    //    throw new ArgumentException(string.Format("Could not find price group: {0} for product: {1}", (object)//priceGroupIdentifier, (object)str));
+                    //}
+
                     PriceGroupPrice priceGroupPrice2 = new PriceGroupPrice();
                     priceGroupPrice2.PriceGroup = (priceGroup);
                     priceGroupPrice2.Product = (product1);
