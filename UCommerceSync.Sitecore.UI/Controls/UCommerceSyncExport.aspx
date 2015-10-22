@@ -19,7 +19,7 @@
                 <tr>
                     <td style="width: 30%;vertical-align: top">Export</td>
                     <td style="width: 70%;vertical-align: top">
-                        <div>Export output files are saved to ~/App_Data/UCommerceSync/.</div>
+                        <div>Export output files are saved to <asp:Label runat="server" ID="outputLocation"></asp:Label>.</div>
                         Export products <asp:CheckBox runat="server" ID="cbExportProducts"/><br/>
                         <asp:Button runat="server" ID="btnExport" Text="Exports" OnClick="btnExport_OnClick"/>
                     </td>

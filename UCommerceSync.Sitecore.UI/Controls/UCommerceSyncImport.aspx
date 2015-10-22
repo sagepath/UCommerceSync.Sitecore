@@ -20,7 +20,7 @@
                     Import
                 </td>
                 <td>
-                    <div>Import is performed from ~/App_Data/UCommerceSync/.</div>
+                    <div>Import is performed from <asp:Label runat="server" ID="inputLocation"></asp:Label>.</div>
                     <ul style="list-style: none">
                         <li>
                             <asp:CheckBox runat="server" ID="importProductCatalogGroups" AutoPostBack="true"/> Import stores

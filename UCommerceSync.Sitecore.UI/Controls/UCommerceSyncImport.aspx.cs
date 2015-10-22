@@ -7,6 +7,9 @@ namespace UCommerceSync.Sitecore.UI.Controls
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+			inputLocation.Text = Helper.LocalSyncDataPath;
+
             importProductCatalogs.Enabled = importProductCatalogGroups.Checked;
             if (!importProductCatalogs.Enabled)
                 importProductCatalogs.Checked = false;

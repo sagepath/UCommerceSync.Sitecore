@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using UCommerceSync.Logging;
 using UCommerceSync.Sitecore.Exporters;
 
@@ -10,34 +11,48 @@ namespace UCommerceSync.Sitecore.UI
 {
     internal class Helper
     {
+
+		private static readonly string _localSyncDataPath = WebConfigurationManager.AppSettings["UcommerceSync.DataPath"] ?? "~/App_Data/UCommerceSync/";
+
         public static string LocalSyncDataPath
         {
-            get { return "~/App_Data/UCommerceSync/"; }
+            get { return _localSyncDataPath; }
         }
 
         public static string LocalLogsPath
         {
-            get { return string.Format("{0}/Logs/", LocalSyncDataPath.TrimEnd('/')); }
+            get { return Path.Combine(LocalSyncDataPath, "Logs"); }
         }
 
         public static string SyncDataPath
         {
             get
             {
-                var directoryInfo = new DirectoryInfo(HttpContext.Current.Server.MapPath(LocalSyncDataPath));
-                if (!directoryInfo.Exists)
-                    directoryInfo.Create();
+	            var directoryInfo = GetDirectoryInfo(LocalSyncDataPath);
                 return directoryInfo.FullName;
             }
         }
+
+	    private static DirectoryInfo GetDirectoryInfo(string path)
+	    {
+		    string pathToDir = path;
+		    if (!System.IO.Path.IsPathRooted(path))
+		    {
+			    pathToDir = HttpContext.Current.Server.MapPath(path);
+		    }
+
+		    DirectoryInfo directoryInfo = new DirectoryInfo(pathToDir);
+                if (!directoryInfo.Exists)
+                    directoryInfo.Create();
+
+		    return directoryInfo;
+	    }
 
         public static string LogsPath
         {
             get
             {
-                var directoryInfo = new DirectoryInfo(HttpContext.Current.Server.MapPath(LocalLogsPath));
-                if (!directoryInfo.Exists)
-                    directoryInfo.Create();
+                var directoryInfo = GetDirectoryInfo(LocalSyncDataPath);
                 return directoryInfo.FullName;
             }
         }
@@ -90,7 +105,7 @@ namespace UCommerceSync.Sitecore.UI
         {
             var path2 = string.Format("{0} {1}.log", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), name);
             File.WriteAllText(Path.Combine(LogsPath, path2), log.Content);
-            return string.Format("{0}{1}", LocalLogsPath, path2);
+            return Path.Combine(LocalLogsPath, path2);
         }
     }
 }

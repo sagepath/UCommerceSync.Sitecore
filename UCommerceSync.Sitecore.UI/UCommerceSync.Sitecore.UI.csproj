@@ -74,7 +74,6 @@
   <ItemGroup>
     <Compile Include="ContentProvider\Constants.cs" />
     <Compile Include="ContentProvider\UCommerceSyncContentTreeProvider.cs" />
-    <Compile Include="ContentProvider\UCommerceSyncNodeTypeToUrlConverter.cs" />
     <Compile Include="Controls\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
