@@ -641,7 +641,10 @@ namespace UCommerceSync.Sitecore.Importers
 						}
 						else
 						{
-							this.Log.Info("- importing simple property {0}", (object)propertyInfo.Name);
+
+							string propertyName = ((object) propertyInfo.Name ?? string.Empty).ToString();
+
+							this.Log.Info("- importing simple property {0}", propertyName);
 							if (type3 == typeof (string) && this._settings.CmsProvider != null)
 							{
 								if (IsMediaIdProperty(propertyInfo))
@@ -655,18 +658,21 @@ namespace UCommerceSync.Sitecore.Importers
 									this.Log.Info("  - CMS provider translated property value to content identifier: {0}",
 										obj1 ?? (object) "(null)");
 								}
-							}
-							else
-							{
-								if (propertyInfo.PropertyType == typeof (DateTime))
+								else 
+								if (propertyName.Equals("CreatedBy") || propertyName.Equals("ModifiedBy"))
 								{
-									DateTime dateTimeVal = (DateTime) obj1;
-									if (dateTimeVal.Equals(DateTime.MinValue))
-									{
-										obj1 = new DateTime(1753, 1, 1);
-									}
+									obj1 = string.Empty;
 								}
 							}
+							else if (propertyInfo.PropertyType == typeof (DateTime))
+							{
+								DateTime dateTimeVal = (DateTime) obj1;
+								if (dateTimeVal.Equals(DateTime.MinValue))
+								{
+									obj1 = new DateTime(1753, 1, 1);
+								}
+							}
+
 							SetPropertyValue(target, propertyInfo, obj1);
 						}
 					}

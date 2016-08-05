@@ -21,7 +21,10 @@ namespace UCommerceSync.Sitecore.UI
 
         public static string LocalLogsPath
         {
-            get { return Path.Combine(LocalSyncDataPath, "Logs"); }
+            get
+            {
+	            return string.Format("{0}{1}Logs/", LocalSyncDataPath, LocalSyncDataPath.EndsWith("/") ? string.Empty : "/");
+            }
         }
 
         public static string SyncDataPath
